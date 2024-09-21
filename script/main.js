@@ -14,17 +14,26 @@ allInputs.forEach((inp) => {
 
 // addevent to calculate BTN
 getElement("calculate", null).addEventListener("click", () => {
+  if (!isInvalid) {
+    return;
+  }
   // updating result summary
-  getElement("results", null).classList.remove("hidden");
-  getElement("total-expenses", null).innerText = getTotalExpenses(
+  const totalExpenses = getTotalExpenses(
     getElement("software", "val"),
     getElement("courses", "val"),
     getElement("internet", "val")
   );
-  getElement("balance", null).innerText = getBalance(
-    getElement("income", "val"),
-    getElement("total-expenses", "textVal")
-  );
+  if (getElement("income", "val") >= totalExpenses) {
+    getElement("results", null).classList.remove("hidden");
+    getElement("total-expenses", null).innerText = totalExpenses;
+    getElement("balance", null).innerText =
+      getElement("income", "val") - totalExpenses;
+    getElement("savings-amount", null).innerText = "00";
+    getElement("remaining-balance", null).innerText = "00";
+  } else {
+    getElement("logic-error", null).classList.remove("hidden");
+    return;
+  }
 
   // adding expense history
   getElement("history-list", null).innerHTML =
@@ -45,6 +54,14 @@ getElement("calculate", null).addEventListener("click", () => {
          "textVal"
        )} </p>
   </div>` + getElement("history-list", null).innerHTML;
+});
+
+// add event to Calculate Savings BTN
+getElement("calculate-savings", null).addEventListener("click", () => {
+  getElement("savings-amount", null).innerText =
+    getElement("income", "val") * (getElement("savings", "val") / 100);
+  getElement("remaining-balance", null).innerText =
+    getElement("balance", "textVal") - getElement("savings-amount", "textVal");
 });
 
 // tab switching and updating content

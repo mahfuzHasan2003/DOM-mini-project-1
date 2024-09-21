@@ -1,13 +1,20 @@
+let isInvalid = true;
 const handleError = (inpElement) => {
   const errElement = getElement(
     inpElement.getAttribute("data-details") + "-error",
-    ""
+    null
   );
   //   console.log(errElement);
-  if (isNaN(inpElement.value) || parseFloat(inpElement.value) < 0) {
+  if (
+    isNaN(inpElement.value) ||
+    parseFloat(inpElement.value) < 0 ||
+    inpElement.value === ""
+  ) {
     errElement.classList.remove("hidden");
+    isInvalid = false;
   } else {
     errElement.classList.add("hidden");
+    isInvalid = true;
   }
 };
 // get element/input value
